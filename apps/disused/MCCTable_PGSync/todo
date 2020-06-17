@@ -1,0 +1,122 @@
+Change the protocol so everytime an ACK is missed, the fault counter is incremented.
+If the fault counter reaches a certain critical value, then flush away the LO (or just don't service it)
+When we have an unused TX slot, go back to normal
+
+--------------------------------------------------------------------------------
+
+Issues in case of result problems:
+
+Is the timer tracking properly between the global and local transmissions
+
+How to know if the transmissions are successful if we can't see the ACKs?
+can we tag it onto other packets etc? as long as there is something to send... or send a monitoring
+packet to destination 99 otherwise
+
+Data would contain the recent numbers of packets seen successfully
+
+Can we write to the node internal memory? If so we could log the number of packets seen successfully there?
+
+--------------------------------------------------------------------------------
+
+For when the results are working:
+
+Set up randomisation of the C value in the TXFlow component
+Or randomise it on packet creation in the TXFlow component
+
+Check the sequence numbers and burst numbers for the new packets
+Test two node communications, especially node 1
+Check the timing changes and interference with a single interferer node for faults
+Check slot shortening
+
+If we receive a packet with the fault structure e.g. 0x23 0x69
+then set activeFault to true
+activeFault is cleared on when the fault ends - set a timer to do it
+Have the fault packet contain the number of slots 
+
+If there is a fault active, then all nodes act as though they didn't
+receive their ACKs, i.e. they refuse to dequeue
+
+One bug to fix: sequence numbers missed out e.g. with flow 6 alone, counting up too many sequence numbers
+
+Ensure the criticalities are set for the various priorities
+Why was that "flow 0" chosen for dequeue? (print it out and examine the packet?)
+What are the additional packets seen on the global listener? (TimeSync layer?)
+
+Check the periods against those shown for node 2 in the analysis in Alan's paper
+
+--------------------------------------------------------------------------------
+Alan questions:
+
+Say I inject with the generator a fault of length 2 tables. If there
+is one random failure due to interference, or time sync error just
+before and one after, then the fault has covered 4 tables. The actual
+fault the nodes see is worse than the worst case we are planning for,
+so if we exceed a deadline, we will not know if it is due to protocol
+misbehaviour or a fault worse than expected. So maybe I have to record
+the maximum missed ACK counter over the course of the evaluation.
+
+Is there any analysis that would determine what the maximum buffer
+size we need is?
+
+Also, what actually happens when a destination node is totally dead?
+To the protocol, this looks like a fault of infinite duration, which
+is beyond what we analysed for. So in this scenario, we would expect
+the queue to fill up for messages of that priority.
+
+Note that this frame may be part of a longer message that was split
+e.g. into 3 frames. In this case, there's really no point in
+discarding a message and ending up with partial data?
+
+--------------------------------------------------------------------------------
+
+If I need more speed for 10ms slots, inline key functions? TinyOS
+should do it automatically though
+
+What is the queue actually doing? It is a FIFO queue, isn't it?
+
+TXFlowP - are they injecting too frequently? (seems OK now)
+
+Get flow 11 working - node 4 needs additional slots?
+
+If there is a problem with sync for node 11, can we merge the sync
+packet with slot 0's data
+
+--------------------------------------------------------------------------------
+Log the reception status of the last packets
+
+Only start the simulation 
+
+Create a flow 1 status record in the buffer - 3 bytes per flow, one
+for the ID, the other two for the sequence number. This allows the
+reception status to be checked, by verifying that they are seen by
+another node.
+
+What to verify - under F=1 fault conditions, all HIs and LOs are
+registered successfully delivered by their deadlines.
+
+Under F=3 fault conditions, LOs may miss their deadlines, but the HIs
+will be delivered by their deadlines as intended properly.
+
+--------------------------------------------------------------------------------
+
+TXFlowP - are they injecting too frequently?
+
+Crashes when the buffers overflow at 10ms cycles when the recipient is
+off or unable to ACK? Is the queue overflowing - suspect yes
+
+Check discarding of the HIs in HI crit mode
+Finish the return to LO crit mode
+
+Need to be ready to get the faults injected - communication with the
+fault injector over USB? Or merely change the fault injector source for now
+(it is OK to have a constant fault length)
+
+Log the confirmed received packets in the listener code - seperate file for them?
+
+Node 3 is in the last slot... sometimes it is in the last slot and
+gets the sink's synchronization packet first?
+
+Release jitter is removed? Is it removed? (check in some way)
+Put the actual sending in a task to give a guard band?
+
+Change table allocation

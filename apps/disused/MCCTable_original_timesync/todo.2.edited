@@ -1,0 +1,43 @@
+Change the protocol so everytime an ACK is missed, the fault counter is incremented.
+If the fault counter reaches a certain critical value, then flush away the LO (or just don't service it)
+When we have an unused TX slot, go back to normal
+
+--------------------------------------------------------------------------------
+
+Issues in case of result problems:
+
+Is the timer tracking properly between the global and local transmissions
+
+How to know if the transmissions are successful if we can't see the ACKs?
+can we tag it onto other packets etc? as long as there is something to send... or send a monitoring
+packet to destination 99 otherwise
+
+Data would contain the recent numbers of packets seen successfully
+
+Can we write to the node internal memory? If so we could log the number of packets seen successfully there?
+
+--------------------------------------------------------------------------------
+
+For when the results are working:
+
+Set up randomisation of the C value in the TXFlow component
+Or randomise it on packet creation in the TXFlow component
+
+Check the sequence numbers and burst numbers for the new packets
+Test two node communications, especially node 1
+Check the timing changes and interference with a single interferer node for faults
+Check slot shortening
+
+If we receive a packet with the fault structure e.g. 0x23 0x69
+then set activeFault to true
+activeFault is cleared on when the fault ends - set a timer to do it
+Have the fault packet contain the number of slots 
+
+If there is a fault active, then all nodes act as though they didn't
+receive their ACKs, i.e. they refuse to dequeue
+
+One bug to fix: sequence numbers missed out e.g. with flow 6 alone, counting up too many sequence numbers
+
+Ensure the criticalities are set for the various priorities
+Why was that "flow 0" chosen for dequeue? (print it out and examine the packet?)
+What are the additional packets seen on the global listener? (TimeSync layer?)

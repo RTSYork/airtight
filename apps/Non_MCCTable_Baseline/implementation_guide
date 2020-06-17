@@ -1,0 +1,129 @@
+Prototype system
+--------------------------------------------------------------------------------
+
+Using the Iris XM-2110 nodes (cite) manufactured by Crossbow
+Technologies and the TinyOS version 2.1 (cite TinyOS book).
+
+The core of the MAC scheme is based upon
+Based upon DMA-MAC (give citation)
+and the FTSP time synchronisation protocol (cite)
+
+Describe the frame format (one slot for time sync)
+Describe the packet format (as a table from the C struct)
+
+A single node (node 0) is connected to a computer and can be
+communicated with over a USB serial link. This permits monitoring
+during runtime of the single node for debugging. Although there is a
+
+--------------------------------------------------------------------------------
+System monitoring and debugging
+--------------------------------------------------------------------------------
+
+Include diagram of the different types of nodes here - or just refer
+back to Alan's earlier diagram.
+
+Monitoring node
+--------------------
+
+In order to perform experiments, an external node can be connected as
+a monitoring node. This node is based upon the TinyOS Basestation
+application and operates in snooping mode which permits it to observe
+all the packets transmitted throughout the network. This monitoring
+node does not participate in the AirTight protocol described in this
+paper, but merely listens constantly to the channel and records all
+AirTight packets observed. This is used during experiments to collect
+performance statistics, by measuring the nodes.
+
+Injecting faults
+--------------------
+
+One approach to injecting faults would be to jam the channel with
+interference, by using an interfering node to send packets constantly
+in a tight loop. As a first approach, this was tested and did not
+provide significant interference to the network, since intermediate
+packets were still able to be transmitted in this interval (only
+around 20% of packets will be disrupted)
+
+A further node (the interferer) is connected to the monitoring
+computer and can be communicated with over a serial link. By sending
+commands to the interferer, a fault of the intended number of slots
+will be signalled. This consists of a single packet transmitted with
+an invalid destination, specifying as the C parameter the number of
+slots for which the faults will last (this number is typically a
+multiple of the slot table length). 
+
+One approach to injecting faults would be to jam the channel with
+interference, by constantly sending packets in a tight loop. As a
+first approach, this was tested and did not provide significant
+interference to the network. 
+
+--------------------------------------------------------------------------------
+Give detail on how the faults are simulated
+
+Sending nodes do not request an ACK on their packets
+Receiving nodes will discard the received packets
+Also sending nodes, if they are set as faulty, will throw away any packets
+
+--------------------------------------------------------------------------------
+Include photograph of the system
+
+Experiment structure
+
+* Table of experimental paramters
+
+To perform an experiment run, firstly system nodes are programmed
+with the appropriate code settings; for example to select the
+experimental parameters (baseline or AirTight protocol enabled), and
+their ID. The experimental node is configured to inject the intended
+fault length for the experiment upon activation. Then the listener
+node is activated and connected over USB, which will monitor the
+network in snooping mode to observe all packets.
+
+All nodes are powered up and permitted to obtain time synchronisation,
+to allow the network to stabilise and ensure the loading is as
+intended in the application definition (nodes which are not time
+synchronised cannot yet transmit). Acquisition of synchronisation is
+indicated by the cycling of the onboard LEDs. Then a process is
+activated on the monitoring computer to log packet records and
+generate incrementally updating result graphs.
+
+If faults are specified for this experiment configuration, then during
+the process of the experiments are activated
+
+* Should experiments be given a fixed time duration from the start of
+  synchronisation. Is there any requirement for the faults to be
+  launched in a consisting timing configuration, e.g. 10s from the start
+  of results logging being activated
+
+--------------------------------------------------------------------------------
+Results
+
+Result graphs
+
+NB these only show the transmissions, not ensuring that all the nodes
+are 
+
+AirTight protocol
+
+The results show that under F=1 fault conditions, all HIs and LOs are
+the transmission times of all the HIs and LOs are below their
+deadlines. The transmission levels of 100% for HIs and LOs are as
+expected.
+
+Under F=3 fault conditions (injection of a 20 slots error throughout
+all network nodes), Figure <...> shows the some LOs may miss their
+deadlines, in particular the LOs for flow 6 will not be delivered in
+time. There are 3 tables required before these flows get serviced,
+resulting in a deadline miss for the transmission.
+
+but
+the HIs will be delivered by their deadlines as intended properly. In
+particular, the LO
+
+Baseline case
+
+However, by contrast in the baseline case (without the AirTight
+protocol, and merely standard priority-based arbitration), it is seen
+that certain fault conditions lead to a HI crit deadline miss, in
+particular in the case of a flow <...> which missed its deadline in a
+second retransmission.

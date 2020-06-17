@@ -1,0 +1,1 @@
+java $JNI FtspDataLogger $MOTECOM

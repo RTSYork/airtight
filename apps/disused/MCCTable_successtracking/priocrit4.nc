@@ -1,0 +1,1 @@
+components new PrioCritQueueC(mccpacket*, MCCBUF_DEPTH_PER_PRIO, 1, 1, 1);

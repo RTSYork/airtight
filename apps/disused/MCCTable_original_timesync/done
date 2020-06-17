@@ -1,0 +1,93 @@
+Setup the priority queue structure working - compiling, now needs to be tested
+Put in a real routing table for the next hop - done
+
+If there is a fault count that exceeds the limit, throw away the LO? - for now, just have individual message dequeing
+Put the base station into promiscious mode - not sure how to do that yet
+Set up the custom table definition for all nodes - 6 data slots in table - done
+
+Set up fault generators on each of the nodes - to inject a fault by stopping the nodes from transmitting if the "fault" flag is set
+
+Installers and data loggers for a configurable node number
+Overall results tracker and experiment running scripts - allows running multiple long-term experiments and capturing the overall statistics
+
+- Use the notification packets to set the mode of the current superframe
+If this flag is zero, then everything is as normal
+If it is 1, then the packet contains information on the fault model only, and the table iteration will be idle until the next one
+If it is 2, then the notification signals that the experiment is over, and that in the slot corresponding to their number, all nodes will send a
+statistics packet back to the base station
+
+One broadcast is to define the fault parameters that all nodes must obey
+Can we send broadcasts to all nodes to collect their statistics, once the experiment is finished?
+
+Use the promiscious mode monitor to observe activity...
+Are the stray packets (size 0E) coming from the time sync layer?
+
+Check the packet prioritisation in the queue? - ensure lowest priority is sent first
+
+Set up fault generators on each of the nodes -
+to inject a fault by stopping the nodes from transmitting if the "fault" flag is set
+
+Timing in TXFlow has 1024 not 1000 for the slot length? - fixed
+
+Need to get a way to show the current timer on the listener... add it to the outgoing packet!
+but is this correct?to inject a fault by stopping the nodes from transmitting if the "fault" flag is set
+
+--------------------------------------------------------------------------------
+Tested the fault generator with fault simulation - when there is a
+fault in process it effectively stops anything from operating with 
+
+Live updating of the Gnuplot window
+
+Can we get a diagram of the overall protocol stack? (showing the radio
+relationships) - no space - rejected
+
+Don't mention that it is based upon DMA-MAC, instead directly clarify
+the protocol and TinyOS components that were actually used - check the
+listing of protocol components and where they came from
+
+Final graphs - change the code to remove the caption on the left hand
+side - only need to update the final graphs
+
+--------------------------------------------------------------------------------
+
+For the final night
+
+Clarify the protocol and TinyOS components that were actually used -
+check the listing of protocol components and where they came from.
+
+Check over rules in the implementation section
+
+Script is done for tracking the failed ACKs
+
+The baseline has been set to never discard, even though that leads to
+larger latency increases. 
+
+it leads to very large latencies due to blocking of the other flows.
+
+Increase the slot seperation to 150 or so, see what the effect on the
+interferer is...
+
+--------------------------------------------------------------------------------
+
+I have a semi-stable baseline without discard, it produced the results
+shown here (over approximately the same runtime as the earlier ones)
+but I wouldn't trust it to remain so permanently. I have increased the
+inter-fault time to 150 slots even, and it didn't have much
+discernable effect.
+
+Sometimes the instabilities in the baseline without discarding often
+seem to result from time synchronisation. If there is no discarding,
+then there will be a buildup in the buffers at the start of the
+network, since the overruns particularly affect flow 5 (which is
+synced and from the start of the network). The other nodes flush their
+buffers on obtaining their time sync, but node 0 doesn't since it is
+already synced. If maybe there are
+
+If we're not doing discarding we need is some way to clear all queues
+and reset failed ACK counters at the start of the experiment,
+regardless of how long it took to set up the time sync. I really need
+some way to broadcast 
+
+So to fix it, put a very long delay before any application flows start
+their transmission! and have the sink explictly flush its buffers and
+have a

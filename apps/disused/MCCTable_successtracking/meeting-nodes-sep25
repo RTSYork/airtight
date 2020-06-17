@@ -1,0 +1,29 @@
+The time sync - 7 slots
+Using a hack to put node 4's TX in slot 0 - will this work if 4 is present - hopefully the data send delay will be OK
+Sync to slot 1 as usual
+Time sync layer is sending its own packets?
+
+The fault generator has its own node... nodes programmed to simulate a fault
+Faulty node sends a burst of packets
+Direct interference didn't work
+
+When in fault mode; nodes 1) don't request an ACK on packets 2) discard received packets 3) always act as if
+ACK wasn't received - tests show it did an extra retransmit
+
+The protocol for the LO crit nodes - what to do with them? (Alan's
+mode change idea or mine)
+
+--------------------------------------------------------------------------------
+Show that if we don't use the LO suspending protocol... some HIs can
+miss their deadlines as a result - use this as a baseline
+
+In future prototype, use a variable length slot header... to start off the table
+
+Test out what the slot lengths can go down to... when are the warnings received?
+Can the notification packet and the MCCpackets be merged? - something to think about for the long term
+
+Can something that arrived in the previous slot be sent? (does this still work under small slots)
+if it can't try selecting the message to sent in the previous slot
+
+Are the deadlines in the graph the analytical response times?
+

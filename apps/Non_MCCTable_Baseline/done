@@ -1,0 +1,39 @@
+Setup the priority queue structure working - compiling, now needs to be tested
+Put in a real routing table for the next hop - done
+
+If there is a fault count that exceeds the limit, throw away the LO? - for now, just have individual message dequeing
+Put the base station into promiscious mode - not sure how to do that yet
+Set up the custom table definition for all nodes - 6 data slots in table - done
+
+Set up fault generators on each of the nodes - to inject a fault by stopping the nodes from transmitting if the "fault" flag is set
+
+Installers and data loggers for a configurable node number
+Overall results tracker and experiment running scripts - allows running multiple long-term experiments and capturing the overall statistics
+
+- Use the notification packets to set the mode of the current superframe
+If this flag is zero, then everything is as normal
+If it is 1, then the packet contains information on the fault model only, and the table iteration will be idle until the next one
+If it is 2, then the notification signals that the experiment is over, and that in the slot corresponding to their number, all nodes will send a
+statistics packet back to the base station
+
+One broadcast is to define the fault parameters that all nodes must obey
+Can we send broadcasts to all nodes to collect their statistics, once the experiment is finished?
+
+Use the promiscious mode monitor to observe activity...
+Are the stray packets (size 0E) coming from the time sync layer?
+
+Check the packet prioritisation in the queue? - ensure lowest priority is sent first
+
+Set up fault generators on each of the nodes -
+to inject a fault by stopping the nodes from transmitting if the "fault" flag is set
+
+Timing in TXFlow has 1024 not 1000 for the slot length? - fixed
+
+Need to get a way to show the current timer on the listener... add it to the outgoing packet!
+but is this correct?to inject a fault by stopping the nodes from transmitting if the "fault" flag is set
+
+--------------------------------------------------------------------------------
+Tested the fault generator with fault simulation - when there is a
+fault in process it effectively stops anything from operating with 
+
+Live updating of the Gnuplot window

@@ -1,0 +1,12 @@
+Hi Alan,
+
+I've updated the result graph for the Airtight no fault case in the document, added a diagram of the scenarios, flows and experiments... I have checked it against my application case the periods seem to match.
+
+Can you rewrite the material in the example section to account for the change in the flow t_5 to period 50? Since the central node now only need 1 slot, the
+
+Thanks,
+
+James
+
+
+

@@ -1,0 +1,8 @@
+// FrameConfiguration - ok, under WUSTL
+
+// CC2420Packet - may only be needed for RSSI - found,ok in WUSTL - removed since it may not work for Iris platform
+
+// Slotter - ok in WUSTL
+// SlotterControl - ok in WUSTL
+
+// GlobalTime, TimeSyncInfo - these are under Ftsp for Flooding Time Sync protocol

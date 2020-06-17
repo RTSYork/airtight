@@ -1,0 +1,6 @@
+// Removed this code for RSSI here
+
+/** @brief Power level and RSSI */
+//outputPower = call linkIndicator.getPower(msg);
+//rssi = (uint16_t) call linkIndicator.getRssi(msg);
+//printfz1("<N> Power : %u, RSSI : %d dBm \n",outputPower,(rssi-RSSI_OFFSET));
